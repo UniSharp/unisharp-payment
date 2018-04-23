@@ -15,8 +15,8 @@ class CathayGateway extends AbstractGateway implements GatewayInterface
         $timestamp = 0
     ) {
         $this->order['MerchantID'] = $this->merchantId;
-        $this->order['MerchantOrderNo'] = $merchantOrderNo;
-        $this->order['Amt'] = $amount;
+        $this->order['MerchantOrderNo'] = strtoupper($merchantOrderNo);
+        $this->order['Amt'] = (int) $amount;
         if (empty($this->actionUrl)) {
             $this->actionUrl = 'https://sslpayment.uwccb.com.tw/EPOSService/Payment/OrderInitial.aspx';
         }
@@ -30,7 +30,7 @@ class CathayGateway extends AbstractGateway implements GatewayInterface
     public function getXml()
     {
         $inst = isset($this->order['InstFlag']) ? "<PERIODNUMBER>{$this->order['InstFlag']}</PERIODNUMBER>" : '';
-        return str_replace("\n", '', "<?xml version='1.0' encoding='UTF-8'?>
+        return str_replace("\n", '', "
             <MERCHANTXML>
                 <CAVALUE>{$this->genCheckValue()}</CAVALUE>
                 <ORDERINFO>
@@ -47,9 +47,9 @@ class CathayGateway extends AbstractGateway implements GatewayInterface
     {
 
         $formId = sprintf("CATHAY_SPGATEWAY_FORM_GO_%s", sha1(time()));
-        $xml = urlencode($this->getXml());
+        $xml = $this->getXml();
         return "
-            <form name='main' id='{$formId}' action='{$this->actionUrl}/OrderInitial.aspx' method='post'>
+            <form name='main' id='{$formId}' action='{$this->actionUrl}' method='post'>
                 <input type='hidden' name='strRqXML' value='{$xml}' />
 				<script> document.getElementById('{$formId}').submit(); </script>
             </form>

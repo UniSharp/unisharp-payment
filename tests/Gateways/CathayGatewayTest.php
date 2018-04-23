@@ -10,23 +10,23 @@ class CathayGatewayTest extends TestCase
     public function testXml()
     {
         $gateway = new CathayGateway([
-            'merchantId' => '1234',
-            'hashKey' => '1234', // alias for CUBKEY
+            'merchantId' => '010990045',
+            'hashKey' => 'f0dc9f7adb09a5985cdfa586cfae260c', // alias for CUBKEY
             'hashIV' => '1234', // 用不到
         ]);
 
         $gateway->newOrder(
-            '4567',
-            50
+            'E180423102001',
+            2045
         );
 
         $expect = "<?xml version='1.0' encoding='UTF-8'?>
             <MERCHANTXML>
-                <CAVALUE>76732f2a42207344714c06c6a0963fe6</CAVALUE>
+                <CAVALUE>0247354e0b7145bb0352bfd02092b9e2</CAVALUE>
                 <ORDERINFO>
-                    <STOREID>1234</STOREID>
-                    <ORDERNUMBER>4567</ORDERNUMBER>
-                    <AMOUNT>50</AMOUNT>
+                    <STOREID>010990045</STOREID>
+                    <ORDERNUMBER>E180423102001</ORDERNUMBER>
+                    <AMOUNT>2045</AMOUNT>
                 </ORDERINFO>
             </MERCHANTXML>
         ";
@@ -89,7 +89,6 @@ class CathayGatewayTest extends TestCase
 			</form>
 		");
 
-var_dump($gateway->genForm(true));
         $response = simplexml_load_string($gateway->genForm(true));
         $this->assertEquals($expect['action'], $response['action']);
     }
