@@ -30,7 +30,7 @@ class CathayGateway extends AbstractGateway implements GatewayInterface
     public function getXml()
     {
         $inst = isset($this->order['InstFlag']) ? "<PERIODNUMBER>{$this->order['InstFlag']}</PERIODNUMBER>" : '';
-        return "<?xml version='1.0' encoding='UTF-8'?>
+        return str_replace("\n", '', "<?xml version='1.0' encoding='UTF-8'?>
             <MERCHANTXML>
                 <CAVALUE>{$this->genCheckValue()}</CAVALUE>
                 <ORDERINFO>
@@ -40,14 +40,18 @@ class CathayGateway extends AbstractGateway implements GatewayInterface
                     {$inst}
                 </ORDERINFO>
             </MERCHANTXML>
-        ";
+        ");
     }
 
     public function genForm($autoSubmit)
     {
+
+        $formId = sprintf("CATHAY_SPGATEWAY_FORM_GO_%s", sha1(time()));
+        $xml = urlencode($this->getXml());
         return "
-            <form name='main' action='https://{$this->actionUrl}/OrderInitial.aspx' method='post' >
-                <input type=hidden name='strRqXML' value='訂單 XML'>
+            <form name='main' id='{$formId}' action='{$this->actionUrl}/OrderInitial.aspx' method='post'>
+                <input type='hidden' name='strRqXML' value='{$xml}' />
+				<script> document.getElementById('{$formId}').submit(); </script>
             </form>
         ";
     }

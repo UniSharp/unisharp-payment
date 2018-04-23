@@ -77,6 +77,20 @@ class CathayGatewayTest extends TestCase
             50
         );
 
-        $gateway->genForm();
+        $expect = simplexml_load_string("
+			<form name='main'
+				id='CATHAY_SPGATEWAY_FORM_GO_503e74d339f991a2d9296194d34f9acea8e19786'
+				action='https://sslpayment.uwccb.com.tw/EPOSService/Payment/OrderInitial.aspx/OrderInitial.aspx'
+                method='post'>
+			   <input type='hidden' name='strRqXML' value='' />
+			   <script>
+                 document.getElementById('CATHAY_SPGATEWAY_FORM_GO_503e74d339f991a2d9296194d34f9acea8e19786').submit();
+               </script>
+			</form>
+		");
+
+var_dump($gateway->genForm(true));
+        $response = simplexml_load_string($gateway->genForm(true));
+        $this->assertEquals($expect['action'], $response['action']);
     }
 }
