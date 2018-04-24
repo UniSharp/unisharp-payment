@@ -15,12 +15,20 @@ class CathayResponse extends AbstractResponse implements ResponseInterface
     
     public function matchCheckCode(array $payload = [])
     {
-        return $payload['CAVALUE'] == md5($payload['ORDERINFO']['STOREID'] .
+        if (isset($payload['AUTHINFO'])) {
+            return $payload['CAVALUE'] == md5($payload['ORDERINFO']['STOREID'] .
+                $payload['ORDERINFO']['ORDERNUMBER'] .
+                $payload['ORDERINFO']['AMOUNT'] .
+                $payload['AUTHINFO']['AUTHSTATUS'] .
+                $payload['AUTHINFO']['AUTHCODE'] .
+                $this->hashKey);
+        }
+
+        return $payload['CAVALUE'] == md5(
+            $payload['ORDERINFO']['STOREID'] .
             $payload['ORDERINFO']['ORDERNUMBER'] .
-            $payload['ORDERINFO']['AMOUNT'] .
-            $payload['AUTHINFO']['AUTHSTATUS'] .
-            $payload['AUTHINFO']['AUTHCODE'] .
-            $this->hashKey);
+            $this->hashKey
+        );
     }
 
     public function rspOk()
