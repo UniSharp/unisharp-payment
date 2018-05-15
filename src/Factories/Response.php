@@ -1,4 +1,4 @@
-<?
+<?php
 namespace UniSharp\Payment\Factories;
 
 use UniSharp\Payment\Factories\Factory;

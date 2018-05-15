@@ -20,7 +20,7 @@ class CathayResponse extends AbstractResponse implements ResponseInterface
                 $payload['ORDERINFO']['ORDERNUMBER'] .
                 $payload['ORDERINFO']['AMOUNT'] .
                 $payload['AUTHINFO']['AUTHSTATUS'] .
-                $payload['AUTHINFO']['AUTHCODE'] .
+                empty($payload['AUTHINFO']['AUTHCODE']) ? '' : $payload['AUTHINFO']['AUTHCODE'] .
                 $this->hashKey);
         }
 
@@ -41,8 +41,8 @@ class CathayResponse extends AbstractResponse implements ResponseInterface
 
     public function processOrderXml()
     {
-        if ($_POST && $_POST['strRqXML']) {
-            $payload = json_decode(json_encode(simplexml_load_string($_POST['strRqXML'])), true);
+        if ($_POST && $_POST['strRsXML']) {
+            $payload = json_decode(json_encode(simplexml_load_string($_POST['strRsXML'])), true);
             $payload['matched'] = $this->matchCheckCode($payload);
             return $payload;
         }
