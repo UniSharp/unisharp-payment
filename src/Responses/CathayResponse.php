@@ -31,12 +31,13 @@ class CathayResponse extends AbstractResponse implements ResponseInterface
         );
     }
 
-    public function rspOk()
+    public function rspOk($returnUrl = null)
     {
-        $domain = parse_url($this->returnUrl)['host'];
+        $returnUrl = $returnUrl ?? $this->returnUrl;
+        $domain = parse_url($returnUrl)['host'];
         $cavalue = md5($domain . $this->hashKey);
         return "<?xml version='1.0' encoding='UTF-8'?>
-            <MERCHANTXML><CAVALUE>$cavalue</CAVALUE><RETURL>{$this->returnUrl}</RETURL></MERCHANTXML>";
+            <MERCHANTXML><CAVALUE>$cavalue</CAVALUE><RETURL>{$returnUrl}</RETURL></MERCHANTXML>";
     }
 
     public function processOrderXml()
