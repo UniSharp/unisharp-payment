@@ -4,8 +4,8 @@ namespace UniSharp\Payment\Factories;
 use UniSharp\Payment\Factories\Factory;
 use UniSharp\Payment\Responses\CathayResponse;
 use VoiceTube\TaiwanPaymentResponse\EcPayPaymentResponse;
+use VoiceTube\TaiwanPaymentGateway\SpGatewayPaymentResponse;
 use VoiceTube\TaiwanPaymentResponse\Common\ResponseInterface;
-use VoiceTube\TaiwanPaymentResponse\SpGatewayPaymentResponse;
 
 class Response extends Factory
 {
